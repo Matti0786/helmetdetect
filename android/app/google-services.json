@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "149013031229",
+    "project_id": "helmetdetectfyp",
+    "storage_bucket": "helmetdetectfyp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149013031229:android:684e8d8a8edd3a6c2b3d54",
+        "android_client_info": {
+          "package_name": "com.example.helmetdetect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL3iAvueqN5S9Euy6a9kQpTXvUnsp9lUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
