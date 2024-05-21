@@ -73,6 +73,7 @@ class _CameraAppState extends State<CameraApp> {
     });
     setState(() {});
   }
+  //
   @override
   void dispose() {
     // Dispose of the camera controller and cancel the timer
