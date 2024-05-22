@@ -10,19 +10,38 @@ class Dummy extends StatefulWidget {
 }
 
 class _DummyState extends State<Dummy> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_outlined),
+        ),
+      ),
       body: Center(
-        child: ElevatedButton(child: Text("Launch Camera"),onPressed: ()async{
-          await availableCameras().then((value) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context)=>CameraApp(camera: value[0],),),
-            );
-          });
-        },),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: Text("Launch Camera"),
+              onPressed: () async {
+                await availableCameras().then((value) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CameraApp(
+                        camera: value[0],
+                      ),
+                    ),
+                  );
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

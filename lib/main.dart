@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:helmetdetect/pages/Camera.dart';
 import 'package:helmetdetect/pages/CameraPage.dart';
+import 'package:helmetdetect/pages/DefaulterList.dart';
 import 'package:helmetdetect/pages/Dummy.dart';
 import 'package:helmetdetect/pages/ForgotPasswordPage.dart';
 import 'package:helmetdetect/pages/HomePage.dart';
 import 'package:helmetdetect/pages/SigninPage.dart';
 
 import 'firebase_options.dart';
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final cameras = await availableCameras();
@@ -31,17 +33,15 @@ class HelmetDetector extends StatelessWidget {
       routes: {
         // '/':(context)=>SigninPage(),
         // '/':(context)=>Camera(),
-        '/':(context)=> Dummy(),
-        '/signin':(context)=>SigninPage(),
-        '/home':(context)=>HomePage(),
-        '/forgotPassword':(context)=>ForgotPasswordPage(),
-        '/camera':(context)=>CameraPage(camera: camera),
-
-
-
+        '/': (context) => HomePage(),
+        '/dummy': (context) => Dummy(),
+        '/signin': (context) => SigninPage(),
+        '/home': (context) => HomePage(),
+        '/forgotPassword': (context) => ForgotPasswordPage(),
+        '/defaulterList': (context) => DefaulterList(),
+        
+        // '/camera':(context)=>CameraPage(camera: camera),
       },
     );
   }
 }
-
-
