@@ -32,14 +32,13 @@ class HelmetDetector extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // '/':(context)=>SigninPage(),
-        // '/':(context)=>Camera(),
         '/': (context) => HomePage(),
         '/dummy': (context) => Dummy(),
         '/signin': (context) => SigninPage(),
         '/home': (context) => HomePage(),
         '/forgotPassword': (context) => ForgotPasswordPage(),
         '/defaulterList': (context) => DefaulterList(),
-        
+
         // '/camera':(context)=>CameraPage(camera: camera),
       },
     );

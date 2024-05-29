@@ -67,7 +67,7 @@ class _DefaulterListState extends State<DefaulterList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Images from Firebase'),
+        title: Text('Defaulters'),
         actions: [
           IconButton(
             icon: Icon(Icons.delete_forever),

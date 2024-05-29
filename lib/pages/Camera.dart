@@ -8,6 +8,7 @@ import 'package:flutter_pytorch/pigeon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:helmetdetect/pages/DefaulterList.dart';
 import 'package:helmetdetect/utilities/CustomSnackbar.dart';
+import 'package:http/http.dart' as http;
 
 class CameraApp extends StatefulWidget {
   final CameraDescription camera;
@@ -89,6 +90,35 @@ class _CameraAppState extends State<CameraApp> {
     super.dispose();
   }
 
+  /////////
+  //
+  // Future uploadImage2() async {
+  //   if (_imageFile == null) return;
+  //
+  //   String base64Image = base64Encode(_imageFile.readAsBytesSync());
+  //   String url = 'http://your_flask_server/upload';
+  //
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse(url),
+  //       body: jsonEncode({'image': base64Image}),
+  //       headers: {'Content-Type': 'application/json'},
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       print('Image uploaded successfully');
+  //       print(jsonDecode(response.body));
+  //     } else {
+  //       print('Failed to upload image');
+  //       print(response.body);
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
+
+  ///////
+
   //Firebase Storage
 
   Future<void> _uploadImage(XFile _image) async {
@@ -132,16 +162,37 @@ class _CameraAppState extends State<CameraApp> {
     final path = DateTime.now().millisecondsSinceEpoch.toString();
     try {
       // Attempt to take a picture and save it to the specified path
-      await _controller.takePicture().then((value) {
-        print('Image is captured');
-        _uploadImage(value).then((value) {
-          print("Image is Uploaded");
-        });
+      await _controller.takePicture().then((value) async {
+        // value.readAsBytes().then((value) {
+        //   print(value);
+        // });
+        print('Image is capture');
+        // _uploadImage(value).then((value) {});
         // Now there integrate a Model that will take image and give prediction that helmet is wearing or not
+        final bytes = await value.readAsBytes();
+        String base64Image = base64Encode(bytes);
+        String url = 'http://192.168.0.110:5000/upload';
 
-        print(value);
+        try {
+          final response = await http.post(
+            Uri.parse(url),
+            body: jsonEncode({'image': base64Image}),
+            headers: {'Content-Type': 'application/json'},
+          );
+
+          if (response.statusCode == 200) {
+            var responseBody = jsonDecode(response.body);
+            bool withoutHelmetDetected =
+                responseBody['without_helmet_detected'];
+            print('withoutHelmetDetected: $withoutHelmetDetected');
+          } else {
+            print('Failed to upload image');
+            print(response.body);
+          }
+        } catch (e) {
+          print('Error: $e');
+        }
         // classifyImage(value);
-        // value.saveTo('path');
       });
     } catch (e) {
       print('Error capturing picture: $e');
