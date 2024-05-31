@@ -63,9 +63,22 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
+                  Navigator.pushNamed(context, '/singleImageDetector');
+                },
+                child: Text("Single Image Detector"),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
                   Navigator.pushNamed(context, '/defaulterList');
                 },
                 child: Text("Defaulter List"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/home2');
+                },
+                child: Text("Home"),
               ),
             ],
           ),

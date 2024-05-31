@@ -163,11 +163,8 @@ class _CameraAppState extends State<CameraApp> {
     try {
       // Attempt to take a picture and save it to the specified path
       await _controller.takePicture().then((value) async {
-        // value.readAsBytes().then((value) {
-        //   print(value);
-        // });
         print('Image is capture');
-        // _uploadImage(value).then((value) {});
+
         // Now there integrate a Model that will take image and give prediction that helmet is wearing or not
         final bytes = await value.readAsBytes();
         String base64Image = base64Encode(bytes);
@@ -185,6 +182,7 @@ class _CameraAppState extends State<CameraApp> {
             bool withoutHelmetDetected =
                 responseBody['without_helmet_detected'];
             print('withoutHelmetDetected: $withoutHelmetDetected');
+            if (withoutHelmetDetected) _uploadImage(value);
           } else {
             print('Failed to upload image');
             print(response.body);
@@ -192,7 +190,6 @@ class _CameraAppState extends State<CameraApp> {
         } catch (e) {
           print('Error: $e');
         }
-        // classifyImage(value);
       });
     } catch (e) {
       print('Error capturing picture: $e');

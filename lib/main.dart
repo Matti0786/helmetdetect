@@ -6,8 +6,11 @@ import 'package:helmetdetect/pages/CameraPage.dart';
 import 'package:helmetdetect/pages/DefaulterList.dart';
 import 'package:helmetdetect/pages/Dummy.dart';
 import 'package:helmetdetect/pages/ForgotPasswordPage.dart';
+import 'package:helmetdetect/pages/Home.dart';
 import 'package:helmetdetect/pages/HomePage.dart';
+import 'package:helmetdetect/pages/PredictionPage.dart';
 import 'package:helmetdetect/pages/SigninPage.dart';
+import 'package:helmetdetect/pages/SingleImageDetector.dart';
 
 import 'firebase_options.dart';
 
@@ -32,12 +35,14 @@ class HelmetDetector extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // '/':(context)=>SigninPage(),
-        '/': (context) => HomePage(),
-        '/dummy': (context) => Dummy(),
+        // '/': (context) => HomePage(),
+        '/': (context) => Home(),
+        '/home': (context) => Home(),
         '/signin': (context) => SigninPage(),
-        '/home': (context) => HomePage(),
         '/forgotPassword': (context) => ForgotPasswordPage(),
         '/defaulterList': (context) => DefaulterList(),
+        '/singleImagePrediction': (context) => SingleImageDetector(),
+        '/predictionPage': (context) => PredictionPage(),
 
         // '/camera':(context)=>CameraPage(camera: camera),
       },
