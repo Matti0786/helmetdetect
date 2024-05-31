@@ -33,14 +33,14 @@ class Home extends StatelessWidget {
               bottomLeft: Radius.circular(0),
               // Adjust this radius to control the circular effect
               bottomRight: Radius.circular(
-                  0), // Adjust this radius to control the circular effect
+                  100), // Adjust this radius to control the circular effect
             ),
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: Image.asset(
                 'assets/images/bg.jpg', // Replace with your image path
-                height: MediaQuery.of(context).size.height * 0.35,
-                fit: BoxFit.fitHeight,
+                height: MediaQuery.of(context).size.height * 0.45,
+                fit: BoxFit.cover,
               ),
             ),
           ),

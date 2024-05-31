@@ -49,38 +49,6 @@ class _CameraAppState extends State<CameraApp> {
     });
   }
 
-  late ClassificationModel classificationModel;
-
-  Future loadModel() async {
-    // classificationModel = await FlutterPytorch.loadClassificationModel(
-    //     "assets/models/best.pt", 224, 224,
-    //     labelPath: "assets/labels/lebels.txt");
-    ModelObjectDetection objectModel =
-        await FlutterPytorch.loadObjectDetectionModel(
-            "assets/models/best.torchscript", 80, 640, 640,
-            labelPath: "assets/labels/lebels.txt");
-    return objectModel;
-  }
-
-  classifyImage(XFile image) async {
-    loadModel().then((value) async {
-      // print('Predictiong');
-      // // String? prediction = await value.getImagePrediction(await File('assets/images/OIP.jpeg').readAsBytesSync());
-      // String prediction = await value.getImagePrediction(await image.readAsBytes());
-      //
-      // // print(image!.path);
-      // print(prediction);
-
-      List<ResultObjectDetection?> objDetect = await value.getImagePrediction(
-          await File('assets/images/OIP.jped').readAsBytes(),
-          minimumScore: 0.1,
-          IOUThershold: 0.3);
-      print("Detecteddd");
-      print(objDetect);
-    });
-    setState(() {});
-  }
-
   //
   @override
   void dispose() {
@@ -90,38 +58,9 @@ class _CameraAppState extends State<CameraApp> {
     super.dispose();
   }
 
-  /////////
-  //
-  // Future uploadImage2() async {
-  //   if (_imageFile == null) return;
-  //
-  //   String base64Image = base64Encode(_imageFile.readAsBytesSync());
-  //   String url = 'http://your_flask_server/upload';
-  //
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(url),
-  //       body: jsonEncode({'image': base64Image}),
-  //       headers: {'Content-Type': 'application/json'},
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       print('Image uploaded successfully');
-  //       print(jsonDecode(response.body));
-  //     } else {
-  //       print('Failed to upload image');
-  //       print(response.body);
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
-
-  ///////
-
   //Firebase Storage
 
-  Future<void> _uploadImage(XFile _image) async {
+  Future<void> _saveImageToDatabase(XFile _image) async {
     // if (_image == null) return;
 
     try {
@@ -154,6 +93,32 @@ class _CameraAppState extends State<CameraApp> {
     }
   }
 
+  Future<void> _detectHelmet(value) async {
+    final bytes = await value.readAsBytes();
+    String base64Image = base64Encode(bytes);
+    String url = 'http://192.168.0.110:5000/upload';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: jsonEncode({'image': base64Image}),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.body);
+        bool withoutHelmetDetected = responseBody['without_helmet_detected'];
+        print('withoutHelmetDetected: $withoutHelmetDetected');
+        if (withoutHelmetDetected) _saveImageToDatabase(value);
+      } else {
+        print('Failed to upload image');
+        print(response.body);
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   Future<void> _capturePicture() async {
     if (!_controller.value.isInitialized) {
       return;
@@ -163,33 +128,8 @@ class _CameraAppState extends State<CameraApp> {
     try {
       // Attempt to take a picture and save it to the specified path
       await _controller.takePicture().then((value) async {
-        print('Image is capture');
-
         // Now there integrate a Model that will take image and give prediction that helmet is wearing or not
-        final bytes = await value.readAsBytes();
-        String base64Image = base64Encode(bytes);
-        String url = 'http://192.168.0.110:5000/upload';
-
-        try {
-          final response = await http.post(
-            Uri.parse(url),
-            body: jsonEncode({'image': base64Image}),
-            headers: {'Content-Type': 'application/json'},
-          );
-
-          if (response.statusCode == 200) {
-            var responseBody = jsonDecode(response.body);
-            bool withoutHelmetDetected =
-                responseBody['without_helmet_detected'];
-            print('withoutHelmetDetected: $withoutHelmetDetected');
-            if (withoutHelmetDetected) _uploadImage(value);
-          } else {
-            print('Failed to upload image');
-            print(response.body);
-          }
-        } catch (e) {
-          print('Error: $e');
-        }
+        _detectHelmet(value);
       });
     } catch (e) {
       print('Error capturing picture: $e');

@@ -10,6 +10,12 @@ class PredictionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: true,
+        title: Text(
+          "Prediction Page",
+          style: TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

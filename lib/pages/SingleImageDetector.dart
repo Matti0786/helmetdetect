@@ -30,7 +30,7 @@ class _SingleImageDetectorState extends State<SingleImageDetector> {
     }
   }
 
-  Future<void> uploadImage() async {
+  Future<void> _detectHelmet() async {
     setState(() {
       predicting = true;
     });
@@ -53,7 +53,6 @@ class _SingleImageDetectorState extends State<SingleImageDetector> {
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
         bool withoutHelmetDetected = responseBody['without_helmet_detected'];
-        print('withoutHelmetDetected: $withoutHelmetDetected');
         setState(() {
           predicting = false;
           if (withoutHelmetDetected)
@@ -64,12 +63,15 @@ class _SingleImageDetectorState extends State<SingleImageDetector> {
             prediction = 'Not Detected';
         });
       } else {
-        print('Failed to upload image');
-        print(response.body);
+        setState(() {
+          prediction = 'Something went wrong';
+        });
       }
     } catch (e) {
-      print('Error uploading image: $e');
-      predicting = false;
+      setState(() {
+        predicting = false;
+        prediction = 'Something went wrong';
+      });
     }
   }
 
@@ -80,26 +82,94 @@ class _SingleImageDetectorState extends State<SingleImageDetector> {
         title: Text('Image Upload'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _imageFile == null
-                ? Text('No image selected.')
-                : Image.file(File(_imageFile!.path)),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: pickImage,
-              child: Text('Pick Image'),
-            ),
-            SizedBox(height: 20),
-            predicting
-                ? CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: uploadImage,
-                    child: Text('Upload Image'),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _imageFile == null
+                  ? Text('No image selected.')
+                  : Image.file(File(_imageFile!.path)),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: pickImage,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.deepPurpleAccent,
+                        Colors.deepPurple.shade700
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
                   ),
-            Text(prediction)
-          ],
+                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 13),
+                  child: Text(
+                    'Select Image',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              predicting
+                  ? CircularProgressIndicator()
+                  : InkWell(
+                      onTap: _detectHelmet,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.deepPurpleAccent,
+                              Colors.deepPurple.shade700
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 80, vertical: 13),
+                        child: Text(
+                          'Predict',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+              SizedBox(height: 20),
+              prediction == ""
+                  ? Text("")
+                  : Text(
+                      "Results are: $prediction",
+                      style: TextStyle(fontSize: 20),
+                    ),
+              SizedBox(
+                height: 50,
+              )
+            ],
+          ),
         ),
       ),
     );
