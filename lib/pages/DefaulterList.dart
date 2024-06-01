@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:helmetdetect/pages/SingleImageShow.dart';
 
 import 'Camera.dart';
 
@@ -89,7 +90,7 @@ class _DefaulterListState extends State<DefaulterList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _imageData = _loadImages();
+            _imageData = _loadImages(query: widget.date);
           });
         },
         child: Icon(Icons.refresh),
@@ -133,43 +134,36 @@ class _DefaulterListState extends State<DefaulterList> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final imageData = snapshot.data![index];
-              return Stack(
-                children: [
-                  Image.network(imageData['url']!),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deleteImage(imageData['path']!),
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          SingleImageShow(imageUrl: imageData['url']!),
                     ),
+                  );
+                },
+                child: Hero(
+                  tag: imageData['path']!,
+                  child: Stack(
+                    children: [
+                      Image.network(imageData['url']!),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteImage(imageData['path']!),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               );
             },
           );
         },
       ),
     );
-    //   Column(
-    //   children: [
-    //     ElevatedButton(
-    //       child: Text("Launch Camera"),
-    //       onPressed: () async {
-    //         await availableCameras().then((value) {
-    //           Navigator.push(
-    //             context,
-    //             MaterialPageRoute(
-    //               builder: (context) => CameraApp(
-    //                 camera: value[0],
-    //               ),
-    //             ),
-    //           );
-    //         });
-    //       },
-    //     ),
-    //     ElevatedButton(onPressed: _loadImages, child: Icon(Icons.front_loader)),
-    //   ],
-    // );
   }
 }

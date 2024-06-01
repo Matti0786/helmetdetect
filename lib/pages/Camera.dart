@@ -98,7 +98,7 @@ class _CameraAppState extends State<CameraApp> {
     });
     final bytes = await value.readAsBytes();
     String base64Image = base64Encode(bytes);
-    String url = 'http://192.168.0.110:5000/upload';
+    String url = 'http://192.168.0.113:5000/upload';
 
     try {
       final response = await http.post(

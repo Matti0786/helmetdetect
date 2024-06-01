@@ -42,7 +42,7 @@ class _SingleImageDetectorState extends State<SingleImageDetector> {
       String base64Image = base64Encode(bytes);
 
       // Use 10.0.2.2 for Android Emulator to connect to localhost
-      String url = 'http://10.13.42.129:5000/upload';
+      String url = 'http://192.168.0.113:5000/upload';
 
       final response = await http.post(
         Uri.parse(url),
