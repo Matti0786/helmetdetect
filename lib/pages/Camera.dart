@@ -146,7 +146,12 @@ class _CameraAppState extends State<CameraApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Camera'),
+          centerTitle: true,
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text(
+            'Camera',
+            style: TextStyle(color: Colors.white),
+          ),
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);

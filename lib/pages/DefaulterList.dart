@@ -7,7 +7,7 @@ import 'Camera.dart';
 class DefaulterList extends StatefulWidget {
   const DefaulterList({super.key, required this.date});
 
-  final DateTime date;
+  final String date;
 
   @override
   State<DefaulterList> createState() => _DefaulterListState();
@@ -20,25 +20,39 @@ class _DefaulterListState extends State<DefaulterList> {
   @override
   void initState() {
     super.initState();
-    _imageData = _loadImages();
+    print(widget.date);
+    _imageData = _loadImages(query: widget.date);
   }
 
-  Future<List<Map<String, String>>> _loadImages() async {
+  Future<List<Map<String, String>>> _loadImages({String query = ''}) async {
     ListResult result = await FirebaseStorage.instance.ref('uploads').listAll();
     List<Map<String, String>> data = [];
-    for (var ref in result.items) {
-      final url = await ref.getDownloadURL();
-      data.add({'url': url, 'path': ref.fullPath});
+    if (query == '') {
+      for (var ref in result.items) {
+        final url = await ref.getDownloadURL();
+        data.add({'url': url, 'path': ref.fullPath});
+      }
+    } else {
+      for (var item in result.items) {
+        String itemName = item.name;
+        if (itemName.contains(query)) {
+          String downloadURL = await item.getDownloadURL();
+          setState(() {
+            data.add({'url': downloadURL, 'path': item.fullPath});
+          });
+        }
+      }
     }
+
     return data;
   }
 
   Future<void> _deleteImage(String path) async {
     try {
       await FirebaseStorage.instance.ref(path).delete();
-      setState(() {
-        _imageData = _loadImages();
-      });
+      // setState(() {
+      //   _imageData = _loadImages();
+      // });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Image deleted successfully"),
         backgroundColor: Theme.of(context).primaryColor,
@@ -56,9 +70,9 @@ class _DefaulterListState extends State<DefaulterList> {
       for (var ref in result.items) {
         await ref.delete();
       }
-      setState(() {
-        _imageData = _loadImages();
-      });
+      // setState(() {
+      //   _imageData = _loadImages();
+      // });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("All images deleted successfully"),
         backgroundColor: Theme.of(context).primaryColor,
@@ -72,11 +86,27 @@ class _DefaulterListState extends State<DefaulterList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _imageData = _loadImages();
+          });
+        },
+        child: Icon(Icons.refresh),
+      ),
       appBar: AppBar(
-        title: Text('Defaulters'),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          'Defaulters',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete_forever),
+            icon: Icon(
+              Icons.delete_forever,
+              color: Colors.white,
+            ),
             onPressed: _deleteAllImages,
           ),
         ],

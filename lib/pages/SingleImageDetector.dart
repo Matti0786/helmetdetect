@@ -79,7 +79,12 @@ class _SingleImageDetectorState extends State<SingleImageDetector> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Upload'),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          'Image Upload',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
         child: SingleChildScrollView(
