@@ -5,7 +5,9 @@ import 'package:camera/camera.dart';
 import 'Camera.dart';
 
 class DefaulterList extends StatefulWidget {
-  const DefaulterList({super.key});
+  const DefaulterList({super.key, required this.date});
+
+  final DateTime date;
 
   @override
   State<DefaulterList> createState() => _DefaulterListState();

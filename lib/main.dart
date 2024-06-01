@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:helmetdetect/pages/Camera.dart';
 import 'package:helmetdetect/pages/CameraPage.dart';
+import 'package:helmetdetect/pages/DateFilter.dart';
 import 'package:helmetdetect/pages/DefaulterList.dart';
 import 'package:helmetdetect/pages/Dummy.dart';
 import 'package:helmetdetect/pages/ForgotPasswordPage.dart';
 import 'package:helmetdetect/pages/Home.dart';
-import 'package:helmetdetect/pages/HomePage.dart';
+
 import 'package:helmetdetect/pages/PredictionPage.dart';
 import 'package:helmetdetect/pages/SigninPage.dart';
 import 'package:helmetdetect/pages/SingleImageDetector.dart';
@@ -40,7 +41,7 @@ class HelmetDetector extends StatelessWidget {
         '/home': (context) => Home(),
         '/signin': (context) => SigninPage(),
         '/forgotPassword': (context) => ForgotPasswordPage(),
-        '/defaulterList': (context) => DefaulterList(),
+        '/defaulterList': (context) => Datefilter(),
         '/singleImagePrediction': (context) => SingleImageDetector(),
         '/predictionPage': (context) => PredictionPage(),
 
