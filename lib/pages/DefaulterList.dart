@@ -37,8 +37,10 @@ class _DefaulterListState extends State<DefaulterList> {
       setState(() {
         _imageData = _loadImages();
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Image deleted successfully")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Image deleted successfully"),
+        backgroundColor: Theme.of(context).primaryColor,
+      ));
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Failed to delete image: $e")));
@@ -55,8 +57,10 @@ class _DefaulterListState extends State<DefaulterList> {
       setState(() {
         _imageData = _loadImages();
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("All images deleted successfully")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("All images deleted successfully"),
+        backgroundColor: Theme.of(context).primaryColor,
+      ));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to delete all images: $e")));

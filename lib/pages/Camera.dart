@@ -61,15 +61,14 @@ class _CameraAppState extends State<CameraApp> {
   //Firebase Storage
 
   Future<void> _saveImageToDatabase(XFile _image) async {
-    // if (_image == null) return;
+    if (_image == null) return;
 
     try {
       // Create a reference to the Firebase Storage
       final storageRef = FirebaseStorage.instance.ref();
 
       // Create a reference to "uploads/filename"
-      final imageRef = storageRef
-          .child("uploads/${DateTime.now().millisecondsSinceEpoch}.jpg");
+      final imageRef = storageRef.child("uploads/${DateTime.now()}.jpg");
 
       // Upload the file to Firebase Storage
       UploadTask uploadTask = imageRef.putFile(File(_image!.path));
@@ -94,6 +93,9 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   Future<void> _detectHelmet(value) async {
+    _saveImageToDatabase(value).then((_) {
+      print("Saved**************");
+    });
     final bytes = await value.readAsBytes();
     String base64Image = base64Encode(bytes);
     String url = 'http://192.168.0.110:5000/upload';

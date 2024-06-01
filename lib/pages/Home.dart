@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../utilities/CustomSnackbar.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -15,8 +18,16 @@ class Home extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              // Implement sign out functionality
+            onPressed: () async {
+              try {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushReplacementNamed(context, '/signin');
+                ScaffoldMessenger.of(context).showSnackBar(customSnackbar(
+                    "Signout Successfully", Theme.of(context).primaryColor));
+              } catch (e) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(customSnackbar(e, Colors.red));
+              }
             },
             icon: Icon(
               Icons.logout,
@@ -33,7 +44,7 @@ class Home extends StatelessWidget {
               bottomLeft: Radius.circular(0),
               // Adjust this radius to control the circular effect
               bottomRight: Radius.circular(
-                  100), // Adjust this radius to control the circular effect
+                  0), // Adjust this radius to control the circular effect
             ),
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
