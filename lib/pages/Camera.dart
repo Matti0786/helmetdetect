@@ -93,9 +93,7 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   Future<void> _detectHelmet(value) async {
-    _saveImageToDatabase(value).then((_) {
-      print("Saved**************");
-    });
+    _saveImageToDatabase(value);
     final bytes = await value.readAsBytes();
     String base64Image = base64Encode(bytes);
     String url = 'http://192.168.0.113:5000/upload';
@@ -111,7 +109,7 @@ class _CameraAppState extends State<CameraApp> {
         var responseBody = jsonDecode(response.body);
         bool withoutHelmetDetected = responseBody['without_helmet_detected'];
         print('withoutHelmetDetected: $withoutHelmetDetected');
-        if (withoutHelmetDetected) _saveImageToDatabase(value);
+        // if (withoutHelmetDetected) _saveImageToDatabase(value);
       } else {
         print('Failed to upload image');
         print(response.body);

@@ -71,9 +71,7 @@ class _DefaulterListState extends State<DefaulterList> {
       for (var ref in result.items) {
         await ref.delete();
       }
-      // setState(() {
-      //   _imageData = _loadImages();
-      // });
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("All images deleted successfully"),
         backgroundColor: Theme.of(context).primaryColor,
